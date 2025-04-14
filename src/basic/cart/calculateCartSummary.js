@@ -3,28 +3,10 @@ import {
   updateLowStockNotice,
   updateCartSummary,
 } from '../components/index.js';
-
-// 상품 할인율 계산
-const getItemDiscountRate = (itemId, quantity) => {
-  if (quantity < 10) {
-    return 0;
-  }
-
-  switch (itemId) {
-    case 'p1':
-      return 0.1;
-    case 'p2':
-      return 0.15;
-    case 'p3':
-      return 0.2;
-    case 'p4':
-      return 0.05;
-    case 'p5':
-      return 0.25;
-    default:
-      return 0;
-  }
-};
+import {
+  getBulkDiscountRate,
+  getItemDiscountRate,
+} from '../promotion/index.js';
 
 // 장바구니 상품의 총액과 수량 계산
 const getItemTotal = (cartItems, products) => {
@@ -57,35 +39,6 @@ const getItemTotal = (cartItems, products) => {
   };
 };
 
-// 대량 구매 및 화요일 할인 적용 후 총액/할인율 계산
-const getBulkDiscountRate = (itemCount, subTotal, totalAmount) => {
-  let discountRate = 0;
-  const bulkDiscount = totalAmount * 0.25;
-  const itemDiscount = subTotal - totalAmount;
-
-  if (itemCount >= 30) {
-    if (bulkDiscount > itemDiscount) {
-      totalAmount = subTotal * (1 - 0.25);
-      discountRate = 0.25;
-    } else {
-      discountRate = itemDiscount / subTotal;
-    }
-  } else {
-    discountRate = itemDiscount / subTotal;
-  }
-
-  // 화요일
-  const isTuesday = new Date().getDay() === 2;
-
-  // 화요일 할인 적용
-  if (isTuesday) {
-    totalAmount *= 1 - 0.1;
-    discountRate = Math.max(discountRate, 0.1);
-  }
-
-  return { discountRate, totalAmount };
-};
-
 // 장바구니 요약 계산
 export const calculateCartSummary = (
   total,
@@ -94,21 +47,25 @@ export const calculateCartSummary = (
   stockInfo
 ) => {
   // 장바구니 상품의 총액과 수량 계산
-  const { itemCount, totalAmount, subTotal } = getItemTotal(
-    cartItemsChildren,
-    products
-  );
+  const {
+    itemCount,
+    totalAmount: baseAmount,
+    subTotal,
+  } = getItemTotal(cartItemsChildren, products);
 
   // 대량 구매 및 화요일 할인 적용 후 총액/할인율 계산
-  const { discountRate, totalAmount: discountTotalAmount } =
-    getBulkDiscountRate(itemCount, subTotal, totalAmount);
+  const { discountRate, totalAmount } = getBulkDiscountRate(
+    itemCount,
+    subTotal,
+    baseAmount
+  );
 
   // 장바구니의 총액을 업데이트
-  updateCartSummary(total, discountRate, discountTotalAmount);
+  updateCartSummary(total, discountRate, totalAmount);
 
   // 재고 상태 업데이트
   updateLowStockNotice(products, stockInfo);
 
   // 포인트 적립 기능
-  applyLoyaltyPoints(total, discountTotalAmount);
+  applyLoyaltyPoints(total, totalAmount);
 };
