@@ -3,7 +3,7 @@ import { createElement } from '../utils/index.js';
 export const applyLoyaltyPoints = (total, totalAmount) => {
   const bonusPoints = Math.floor(totalAmount / 1000);
 
-  let ptsTag = document.getElementById('loyalty-points');
+  let ptsTag = document.querySelector('#loyalty-points');
 
   if (!ptsTag) {
     ptsTag = createElement('span', {

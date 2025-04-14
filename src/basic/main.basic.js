@@ -14,7 +14,7 @@ const products = [
 let select, addButton, cartItemsContainer, total, stockInfo, lastSelectedItem;
 
 const main = () => {
-  const root = document.getElementById('app');
+  const root = document.querySelector('#app');
   const cont = createElement('div', {
     className: 'bg-gray-100 p-8',
   });
@@ -80,7 +80,7 @@ addButton.addEventListener('click', () => {
   });
 
   if (itemToAdd && itemToAdd.quantity > 0) {
-    const item = document.getElementById(itemToAdd.id);
+    const item = document.querySelector(`#${itemToAdd.id}`);
 
     if (item) {
       const newQty =
@@ -88,7 +88,7 @@ addButton.addEventListener('click', () => {
 
       if (newQty <= itemToAdd.quantity) {
         item.querySelector('span').textContent =
-          itemToAdd.name + ' - ' + itemToAdd.price + '원 x ' + newQty;
+          `${itemToAdd.name} - ${itemToAdd.price}원 x ${newQty}`;
 
         itemToAdd.quantity--;
       } else {
@@ -135,7 +135,7 @@ cartItemsContainer.addEventListener('click', event => {
     tgt.classList.contains('remove-item')
   ) {
     const productId = tgt.dataset.productId;
-    const itemElem = document.getElementById(productId);
+    const itemElem = document.querySelector(`#${productId}`);
 
     const prod = products.find(product => {
       return product.id === productId;
