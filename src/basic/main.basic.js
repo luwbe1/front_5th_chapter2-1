@@ -61,7 +61,7 @@ const main = () => {
   cont.appendChild(wrap);
   root.appendChild(cont);
 
-  calculateCartSummary(total, cartItemsContainer, products, stockInfo);
+  calculateCartSummary(total, cartItemsContainer.children, products, stockInfo);
 
   // 번개세일
   randomSale(products);
