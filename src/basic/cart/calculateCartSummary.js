@@ -4,6 +4,25 @@ import {
 } from '../components/index.js';
 import { createElement } from '../utils/index.js';
 
+const getItemDiscountRate = (itemId, quantity) => {
+  if (quantity < 10) return 0;
+
+  switch (itemId) {
+    case 'p1':
+      return 0.1;
+    case 'p2':
+      return 0.15;
+    case 'p3':
+      return 0.2;
+    case 'p4':
+      return 0.05;
+    case 'p5':
+      return 0.25;
+    default:
+      return 0;
+  }
+};
+
 export const calculateCartSummary = (
   total,
   cartItemsContainer,
@@ -36,59 +55,41 @@ export const calculateCartSummary = (
       itemCount += q;
       subTotal += itemTotal;
 
-      if (q >= 10) {
-        switch (currentItem.id) {
-          case 'p1':
-            discount = 0.1;
-            break;
-          case 'p2':
-            discount = 0.15;
-            break;
-          case 'p3':
-            discount = 0.2;
-            break;
-          case 'p4':
-            discount = 0.05;
-            break;
-          case 'p5':
-            discount = 0.25;
-            break;
-          default:
-            discount = 0;
-        }
-      }
+      discount = getItemDiscountRate(currentItem.id, q);
 
       totalAmount += itemTotal * (1 - discount);
     })();
   }
 
   let discountRate = 0;
+  const bulkDiscount = totalAmount * 0.25;
+  const itemDiscount = subTotal - totalAmount;
 
   if (itemCount >= 30) {
-    const bulkDisc = totalAmount * 0.25;
-    const itemDisc = subTotal - totalAmount;
-
-    if (bulkDisc > itemDisc) {
+    if (bulkDiscount > itemDiscount) {
       totalAmount = subTotal * (1 - 0.25);
       discountRate = 0.25;
     } else {
-      discountRate = (subTotal - totalAmount) / subTotal;
+      discountRate = itemDiscount / subTotal;
     }
   } else {
-    discountRate = (subTotal - totalAmount) / subTotal;
+    discountRate = itemDiscount / subTotal;
   }
 
-  if (new Date().getDay() === 2) {
+  // 화요일
+  const isTuesday = new Date().getDay() === 2;
+
+  if (isTuesday) {
     totalAmount *= 1 - 0.1;
     discountRate = Math.max(discountRate, 0.1);
   }
 
-  total.textContent = '총액: ' + Math.round(totalAmount) + '원';
+  total.textContent = `총액: ${Math.round(totalAmount)}원`;
 
   if (discountRate > 0) {
     const span = createElement('span', {
       className: 'text-green-500 ml-2',
-      text: '(' + (discountRate * 100).toFixed(1) + '% 할인 적용)',
+      text: `(${(discountRate * 100).toFixed(1)}% 할인 적용)`,
     });
 
     total.appendChild(span);
