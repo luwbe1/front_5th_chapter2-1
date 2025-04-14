@@ -9,6 +9,9 @@ export const createElement = (tag, options = {}) => {
   if (options.text) {
     element.textContent = options.text;
   }
+  if (options.value) {
+    element.value = options.value;
+  }
 
   return element;
 };
