@@ -2,6 +2,7 @@ import { calculateCartSummary } from './calculateCartSummary';
 import { updateCartItemText, getQuantity } from './utils';
 import { createCartElement } from '../components/index.js';
 
+// 장바구니에 상품 추가
 export const handleAddToCart = (
   select,
   cartItemsContainer,
@@ -22,19 +23,19 @@ export const handleAddToCart = (
     if (item) {
       const newQuantity = getQuantity(item) + 1;
 
-      if (newQuantity <= itemToAdd.quantity) {
-        updateCartItemText(item, itemToAdd.name, itemToAdd.price, newQuantity);
-
-        itemToAdd.quantity--;
-      } else {
+      if (newQuantity > itemToAdd.quantity) {
         alert('재고가 부족합니다.');
+        return;
       }
+
+      updateCartItemText(item, itemToAdd.name, itemToAdd.price, newQuantity);
     } else {
       const newItem = createCartElement(itemToAdd);
       cartItemsContainer.appendChild(newItem);
-
-      itemToAdd.quantity--;
     }
+
+    // 상품 수량 감소 한 번만
+    itemToAdd.quantity--;
 
     calculateCartSummary(
       total,
@@ -47,6 +48,7 @@ export const handleAddToCart = (
   }
 };
 
+// 장바구니 상품 클릭 이벤트 처리
 export const handleCartItemClick = (
   event,
   cartItemsContainer,
@@ -54,46 +56,42 @@ export const handleCartItemClick = (
   stockInfo,
   products
 ) => {
-  const tgt = event.target;
+  const target = event.target;
 
   if (
-    tgt.classList.contains('quantity-change') ||
-    tgt.classList.contains('remove-item')
+    target.classList.contains('quantity-change') &&
+    target.classList.contains('remove-item')
   ) {
-    const productId = tgt.dataset.productId;
-    const itemElement = document.querySelector(`#${productId}`);
-
-    const prod = products.find(product => {
-      return product.id === productId;
-    });
-
-    if (tgt.classList.contains('quantity-change')) {
-      const qtyChange = parseInt(tgt.dataset.change);
-      const newQuantity = getQuantity(itemElement) + qtyChange;
-
-      if (
-        newQuantity > 0 &&
-        newQuantity <= prod.quantity + getQuantity(itemElement)
-      ) {
-        updateCartItemText(itemElement, prod.name, prod.price, newQuantity);
-        prod.quantity -= qtyChange;
-      } else if (newQuantity <= 0) {
-        itemElement.remove();
-        prod.quantity -= qtyChange;
-      } else {
-        alert('재고가 부족합니다.');
-      }
-    } else if (tgt.classList.contains('remove-item')) {
-      const remQty = getQuantity(itemElement);
-      prod.quantity += remQty;
-      itemElement.remove();
-    }
-
-    calculateCartSummary(
-      total,
-      cartItemsContainer.children,
-      products,
-      stockInfo
-    );
+    return;
   }
+
+  const productId = target.dataset.productId;
+  const itemElement = document.querySelector(`#${productId}`);
+  const prod = products.find(product => {
+    return product.id === productId;
+  });
+
+  const currentQuantity = getQuantity(itemElement);
+
+  if (target.classList.contains('quantity-change')) {
+    const quantityChange = parseInt(target.dataset.change);
+    const newQuantity = currentQuantity + quantityChange;
+
+    if (newQuantity > 0 && newQuantity <= prod.quantity + currentQuantity) {
+      updateCartItemText(itemElement, prod.name, prod.price, newQuantity);
+      prod.quantity -= quantityChange;
+    } else if (newQuantity <= 0) {
+      itemElement.remove();
+      prod.quantity -= quantityChange;
+    } else {
+      alert('재고가 부족합니다.');
+    }
+  }
+
+  if (target.classList.contains('remove-item')) {
+    prod.quantity += currentQuantity;
+    itemElement.remove();
+  }
+
+  calculateCartSummary(total, cartItemsContainer.children, products, stockInfo);
 };
