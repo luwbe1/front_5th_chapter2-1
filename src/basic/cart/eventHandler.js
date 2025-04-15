@@ -9,7 +9,7 @@ export const handleAddToCart = (
   cartItemsContainer,
   total,
   stockInfo,
-  lastSelectedItem,
+  setLastSelectedItem,
   products
 ) => {
   const selectItem = select.value;
@@ -45,7 +45,7 @@ export const handleAddToCart = (
       stockInfo
     );
 
-    lastSelectedItem = selectItem;
+    setLastSelectedItem(selectItem); // 외부 상태 반영
   }
 };
 
@@ -60,8 +60,8 @@ export const handleCartItemClick = (
   const target = event.target;
 
   if (
-    target.classList.contains('quantity-change') &&
-    target.classList.contains('remove-item')
+    !target.classList.contains('quantity-change') &&
+    !target.classList.contains('remove-item')
   ) {
     return;
   }

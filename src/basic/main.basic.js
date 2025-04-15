@@ -9,6 +9,11 @@ import { TITLE_TEXT, ADD_BUTTON_TEXT } from './constants/index.js';
 let select, addButton, cartItemsContainer, total, stockInfo, lastSelectedItem;
 
 const bindEvents = () => {
+  // 장바구니 상품 클릭 이벤트 처리
+  const setLastSelectedItem = value => {
+    lastSelectedItem = value;
+  };
+
   // 장바구니 추가 버튼 클릭 이벤트 처리
   addButton.addEventListener('click', () => {
     handleAddToCart(
@@ -16,7 +21,7 @@ const bindEvents = () => {
       cartItemsContainer,
       total,
       stockInfo,
-      lastSelectedItem,
+      setLastSelectedItem,
       products
     );
   });
