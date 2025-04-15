@@ -1,4 +1,5 @@
 export const randomSale = (
+  lastSelectedItem,
   products,
   interval = 30000,
   delay = Math.random() * 10000
@@ -12,7 +13,7 @@ export const randomSale = (
 
         alert(`번개세일! ${luckyItem.name}이(가) 20% 할인 중입니다!`);
 
-        onUpdate?.();
+        updateProductOptions(lastSelectedItem, products);
       }
     }, interval);
   }, delay);
