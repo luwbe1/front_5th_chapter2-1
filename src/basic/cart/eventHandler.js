@@ -1,6 +1,7 @@
 import { calculateCartSummary } from './calculateCartSummary';
 import { updateCartItemText, getQuantity } from './utils';
 import { createCartElement } from '../components/index.js';
+import { NO_STOCK_TEXT } from '../constants/index.js';
 
 // 장바구니에 상품 추가
 export const handleAddToCart = (
@@ -24,7 +25,7 @@ export const handleAddToCart = (
       const newQuantity = getQuantity(item) + 1;
 
       if (newQuantity > itemToAdd.quantity) {
-        alert('재고가 부족합니다.');
+        alert(NO_STOCK_TEXT);
         return;
       }
 
@@ -84,7 +85,7 @@ export const handleCartItemClick = (
       itemElement.remove();
       prod.quantity -= quantityChange;
     } else {
-      alert('재고가 부족합니다.');
+      alert(NO_STOCK_TEXT);
     }
   }
 
