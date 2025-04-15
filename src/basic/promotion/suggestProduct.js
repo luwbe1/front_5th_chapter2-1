@@ -18,7 +18,7 @@ export const suggestProduct = (
 
           suggest.price = Math.round(suggest.price * 0.95);
 
-          updateProductOptions();
+          updateProductOptions(lastSelectedItem, products);
         }
       }
     }, interval);
