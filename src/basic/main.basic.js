@@ -36,53 +36,39 @@ const initializeLayout = () => {
   const root = document.querySelector('#app');
 
   if (!root) {
-    console.error('루트가 엘리먼트가 없습니다.');
+    console.error('루트 엘리먼트가 없습니다.');
     return;
   }
 
-  const cont = createElement('div', {
-    className: 'bg-gray-100 p-8',
-  });
-  const wrap = createElement('div', {
-    className:
-      'max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8',
-  });
-  const hyperText = createElement('h1', {
-    className: 'text-2xl font-bold mb-4',
-    text: TITLE_TEXT,
-  });
+  // 가독성을 위해 innerHtml로 변경
+  root.innerHTML = `
+    <div class="bg-gray-100 p-8">
+      <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8">
+        <h1 class="text-2xl font-bold mb-4">${TITLE_TEXT}</h1>
 
-  cartItemsContainer = createElement('div', {
-    id: 'cart-items',
-  });
-  total = createElement('div', {
-    id: 'cart-total',
-    className: 'text-xl font-bold my-4',
-  });
-  select = createElement('select', {
-    id: 'product-select',
-    className: 'border rounded p-2 mr-2',
-  });
-  addButton = createElement('button', {
-    id: 'add-to-cart',
-    className: 'bg-blue-500 text-white px-4 py-2 rounded',
-    text: ADD_BUTTON_TEXT,
-  });
-  stockInfo = createElement('div', {
-    id: 'stock-status',
-    className: 'text-sm text-gray-500 mt-2',
-  });
+        <div id="cart-items"></div>
 
-  wrap.append(
-    hyperText,
-    cartItemsContainer,
-    total,
-    select,
-    addButton,
-    stockInfo
-  );
-  cont.appendChild(wrap);
-  root.appendChild(cont);
+        <div id="cart-total" class="text-xl font-bold my-4"></div>
+
+          <select id="product-select" class="border rounded p-2 flex-1"></select>
+          <button
+            id="add-to-cart"
+            class="bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            ${ADD_BUTTON_TEXT}
+          </button>
+
+        <div id="stock-status" class="text-sm text-gray-500 mt-2"></div>
+      </div>
+    </div>
+  `;
+
+  // DOM 요소 참조 다시 저장
+  cartItemsContainer = document.querySelector('#cart-items');
+  total = document.querySelector('#cart-total');
+  select = document.querySelector('#product-select');
+  addButton = document.querySelector('#add-to-cart');
+  stockInfo = document.querySelector('#stock-status');
 };
 
 const main = () => {
