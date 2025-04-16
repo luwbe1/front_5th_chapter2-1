@@ -1,3 +1,5 @@
+import { updateProductOptions } from '../components';
+
 export const randomSale = (
   lastSelectedItem,
   products,
