@@ -12,9 +12,11 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
+        main: path.resolve(__dirname, 'index.html'),
         basic: path.resolve(__dirname, 'index.basic.html'),
-        advanced: path.resolve(__dirname, 'index.advanced.html'), // React 앱만 빌드
+        advanced: path.resolve(__dirname, 'index.advanced.html'),
       },
     },
   },
+  base: process.env.NODE_ENV === 'production' ? '/front_5th_chapter2-1/' : '/',
 });

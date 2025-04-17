@@ -14,7 +14,9 @@
     "test:advanced": "vitest advanced.test.js",
     "test:ui": "vitest --ui",
     "lint": "eslint src",
-    "prettier": "prettier --write ./src"
+    "prettier": "prettier --write ./src",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",
@@ -32,6 +34,8 @@
     "react-dom": "^19.1.0",
     "typescript": "^5.8.3",
     "vite": "^6.2.6",
-    "vitest": "^3.1.1"
-  }
+    "vitest": "^3.1.1",
+    "gh-pages": "^6.3.0"
+  },
+  "homepage": "https://luwbe1.github.io/front_5th_chapter2-1/"
 }
