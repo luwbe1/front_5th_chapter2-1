@@ -4,15 +4,19 @@ import { CartItem } from './CartItem';
 interface CartListProps {
   cartItems: CartItemType[];
   products: Product[];
-  onChangeQuantity: (id: string, delta: number) => void;
-  onRemoveItem: (id: string) => void;
+  actions: {
+    onChangeQuantity: (id: string, delta: number) => void;
+    onRemoveItem: (id: string) => void;
+  };
 }
 
+// CartList 컴포넌트
+// 장바구니에 담긴 상품 목록을 표시합니다.
+// 장바구니가 비어있을 경우 "장바구니가 비어 있습니다."라는 메시지를 표시합니다.
 export const CartList = ({
   cartItems,
   products,
-  onChangeQuantity,
-  onRemoveItem,
+  actions: { onChangeQuantity, onRemoveItem },
 }: CartListProps) => {
   return (
     <div className="space-y-2">
@@ -29,8 +33,10 @@ export const CartList = ({
               key={item.productId}
               product={product}
               quantity={item.quantity}
-              onChangeQuantity={onChangeQuantity}
-              onRemove={onRemoveItem}
+              actions={{
+                onChangeQuantity,
+                onRemove: onRemoveItem,
+              }}
             />
           );
         })

@@ -1,3 +1,5 @@
+import { Product } from '../types/index';
+
 // 상품별 할인율
 export const getItemDiscountRate = (
   itemId: string,
@@ -49,4 +51,14 @@ export const getBulkDiscountRate = (
   }
 
   return { discountRate, totalAmount };
+};
+
+export const getStockInfoMessage = (products: Product[]) => {
+  return products
+    .filter(p => p.quantity <= 5)
+    .map(
+      p =>
+        `${p.name}: ${p.quantity > 0 ? `재고 부족 (${p.quantity}개 남음)` : '품절'}`
+    )
+    .join('\n');
 };

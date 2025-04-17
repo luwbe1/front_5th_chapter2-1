@@ -1,13 +1,16 @@
 interface ButtonGroupProps {
   productId: string;
-  onChangeQuantity: (id: string, delta: number) => void;
-  onRemove: (id: string) => void;
+  actions: {
+    onChangeQuantity: (id: string, delta: number) => void;
+    onRemove: (id: string) => void;
+  };
 }
 
+// 버튼 그룹 컴포넌트
+// 장바구니 아이템의 수량을 변경하거나 삭제하는 버튼을 포함합니다.
 export const ButtonGroup = ({
   productId,
-  onChangeQuantity,
-  onRemove,
+  actions: { onChangeQuantity, onRemove },
 }: ButtonGroupProps) => {
   return (
     <div>
