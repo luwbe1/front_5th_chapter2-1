@@ -18,16 +18,27 @@ export const handleAddToCart = (
     return product.id === selectItem;
   });
 
+  // 재고 없는 상태일 때
+  if (itemToAdd.quantity <= 0) {
+    alert('재고가 부족합니다.');
+    return;
+  }
+
   if (itemToAdd && itemToAdd.quantity > 0) {
     const item = document.querySelector(`#${itemToAdd.id}`);
+    const currentQuantity = item ? getQuantity(item) : 0;
+    const newQuantity = currentQuantity + 1;
+
+    if (newQuantity > currentQuantity + itemToAdd.quantity) {
+      alert(NO_STOCK_TEXT);
+      return;
+    }
 
     if (item) {
-      const newQuantity = getQuantity(item) + 1;
-
-      if (newQuantity > itemToAdd.quantity) {
-        alert(NO_STOCK_TEXT);
-        return;
-      }
+      //   if (newQuantity > itemToAdd.quantity) {
+      //     alert(NO_STOCK_TEXT);
+      //     return;
+      //   }
 
       updateCartItemText(item, itemToAdd.name, itemToAdd.price, newQuantity);
     } else {
