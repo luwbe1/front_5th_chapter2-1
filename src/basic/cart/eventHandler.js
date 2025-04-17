@@ -20,7 +20,7 @@ export const handleAddToCart = (
 
   // 재고 없는 상태일 때
   if (itemToAdd.quantity <= 0) {
-    alert('재고가 부족합니다.');
+    alert(NO_STOCK_TEXT);
     return;
   }
 
