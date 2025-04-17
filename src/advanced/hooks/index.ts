@@ -1,0 +1,1 @@
+export { usePromotionEffects } from './usePromotionEffects';

@@ -40,14 +40,19 @@ const App = () => {
     const product = products.find(p => p.id === productId);
     if (!product) return;
 
-    const existing = cartItems.find(item => item.productId === productId);
+    const cartItem = cartItems.find(item => item.productId === productId);
+    const currentQty = cartItem?.quantity ?? 0;
+    const newQty = currentQty + 1;
 
-    if (existing) {
-      if (product.quantity <= 0) {
-        alert('재고가 부족합니다.');
-        return;
-      }
+    // ✅ Vanilla 방식으로 비교: 담으려는 수량이 전체 수량 초과인지 확인
+    const totalStock = currentQty + product.quantity;
+    if (newQty > totalStock) {
+      alert('재고가 부족합니다.');
+      return;
+    }
 
+    // 장바구니에 추가
+    if (cartItem) {
       setCartItems(prev =>
         prev.map(item =>
           item.productId === productId
@@ -59,43 +64,38 @@ const App = () => {
       setCartItems(prev => [...prev, { productId, quantity: 1 }]);
     }
 
-    // 재고 감소
+    // 재고 차감
     setProducts(prev =>
       prev.map(p =>
         p.id === productId ? { ...p, quantity: p.quantity - 1 } : p
       )
     );
-
-    setSelectedProductId('');
   };
 
   const handleChangeQuantity = (productId: string, delta: number) => {
     const product = products.find(p => p.id === productId);
     const cartItem = cartItems.find(item => item.productId === productId);
-
     if (!product || !cartItem) return;
 
-    const newQuantity = cartItem.quantity + delta;
+    const newQty = cartItem.quantity + delta;
+    const totalStock = cartItem.quantity + product.quantity;
 
-    // 수량 증가 시, 재고 확인
-    if (delta > 0 && product.quantity < 1) {
+    if (delta > 0 && newQty > totalStock) {
       alert('재고가 부족합니다.');
       return;
     }
 
-    if (newQuantity <= 0) {
+    if (newQty <= 0) {
       handleRemoveItem(productId);
       return;
     }
 
-    // 수량 변경
     setCartItems(prev =>
       prev.map(item =>
-        item.productId === productId ? { ...item, quantity: newQuantity } : item
+        item.productId === productId ? { ...item, quantity: newQty } : item
       )
     );
 
-    // 재고 복구 또는 감소
     setProducts(prev =>
       prev.map(p =>
         p.id === productId ? { ...p, quantity: p.quantity - delta } : p
