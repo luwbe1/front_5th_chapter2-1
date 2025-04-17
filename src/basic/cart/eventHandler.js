@@ -35,11 +35,6 @@ export const handleAddToCart = (
     }
 
     if (item) {
-      //   if (newQuantity > itemToAdd.quantity) {
-      //     alert(NO_STOCK_TEXT);
-      //     return;
-      //   }
-
       updateCartItemText(item, itemToAdd.name, itemToAdd.price, newQuantity);
     } else {
       const newItem = createCartElement(itemToAdd);
