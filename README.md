@@ -1,9 +1,9 @@
 ## 과제 체크포인트
 
 ### 배포링크
-https://luwbe1.github.io/front_5th_chapter2-1/
-https://luwbe1.github.io/front_5th_chapter2-1/index.basic.html
-https://luwbe1.github.io/front_5th_chapter2-1/index.advanced.html
+https://luwbe1.github.io/front_5th_chapter2-1/ <br >
+https://luwbe1.github.io/front_5th_chapter2-1/index.basic.html  <br >
+https://luwbe1.github.io/front_5th_chapter2-1/index.advanced.html  <br >
 
 ### 기본과제
 
